@@ -26,16 +26,23 @@ const App = () => {
   const addName = (e)=>{
     e.preventDefault()
     let checkName = persons.filter((p)=>p.name===newName)
-    console.log(checkName.length)
+    console.log(checkName[0]?.id)
+    const newPerson = {
+      name:newName,
+      number: newNumber
+    }
     if(checkName.length!==0){
-      alert(`${newName} is already added to phonebook`)
+      if(window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
+        personService.
+        update(newPerson,checkName[0].id)
+        .then((response)=>{
+          setPersons(persons.map(p => p.name !== newName? p:response))
+          console.log(persons)
+        })
+      }
     }
     else{
-      const newPerson = {
-        name:newName,
-        number: newNumber
-      }
-
+  
       personService.
       create(newPerson)
       .then(response=>{
