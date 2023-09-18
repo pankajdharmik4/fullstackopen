@@ -12,16 +12,16 @@ const App = () => {
   const [newNumber,setNewNumber] = useState('');
   const [newSearch,setNewSearch] = useState('');
 
-
-  useEffect(()=>{
-    console.log("effect")
+  const getPhonebook = ()=>{
+    console.log("GET DATA")
     personService
     .getAll()
     .then(response=>{
       setPersons(response)
     })
-  },[])
+  }
 
+  useEffect(getPhonebook,[])
 
   const addName = (e)=>{
     e.preventDefault()
@@ -50,6 +50,13 @@ const App = () => {
   ? persons.filter(p => p.name.toLowerCase().search(newSearch.toLowerCase())!=-1)
   : persons;
 
+  const handleDelete = (id)=>{
+      personService.
+        deletePerson(id)
+        .then(()=>{
+          setPersons(persons.filter(p => p.id !== id))
+        })
+      }
 
   return (
     <div>
@@ -60,8 +67,7 @@ const App = () => {
       <PersonForm addName={addName} newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber}/>
 
       <h2>Numbers</h2>
-      <Persons personToDisplay={personToDisplay}/>
-
+      <Persons personToDisplay={personToDisplay} handleDelete={handleDelete}/>
     </div>
   )
 }
