@@ -1,6 +1,6 @@
 import React from 'react'
 
-const style = {
+const styleGreen = {
     color: 'green',
     background: 'lightgrey',
     fontSize: 20,
@@ -9,13 +9,23 @@ const style = {
     padding: 10,
     marginBottom: 10,
 }
-const Notifications = ({ message }) => {
+
+const styleRed = {
+  color: 'red',
+  background: 'lightgrey',
+  fontSize: 20,
+  borderStyle: 'solid',
+  borderRadius: 5,
+  padding: 10,
+  marginBottom: 10,
+}
+const Notifications = ({ message,error }) => {
   if (message === null) {
     return null
   }
 
   return (
-    <div style={style} >
+    <div style={error?styleGreen:styleRed} >
       {message}
     </div>
   )

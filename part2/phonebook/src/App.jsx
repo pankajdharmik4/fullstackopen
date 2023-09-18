@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber,setNewNumber] = useState('');
   const [newSearch,setNewSearch] = useState('');
   const [Message,setMessage] = useState(null);
+  const [error,setError] = useState(false);
 
   const getPhonebook = ()=>{
     console.log("GET DATA")
@@ -63,12 +64,21 @@ const App = () => {
   : persons;
 
   const handleDelete = (id)=>{
-    if(window.confirm(`Delete ${persons.filter(p => p.id === id)[0].name}?`)){
+    const deleteName = persons.filter(p => p.id === id)[0].name;
+    if(window.confirm(`Delete ${deleteName}?`)){
       personService.
         deletePerson(id)
         .then(()=>{
           setPersons(persons.filter(p => p.id !== id))
         })
+        .catch(()=>{
+          setMessage(`Information of ${deleteName} has already been removed from server`)
+          setError(true);
+        })
+        setTimeout(()=>{
+          setMessage(null)
+          setError(false)
+        },5000)
       }
     }
 
@@ -76,7 +86,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notifications message={Message} />
+      <Notifications message={Message} error={error}/>
 
       <Filter search={newSearch} setNewSearch={setNewSearch}/>
         
