@@ -8,9 +8,16 @@ const App = () => {
 
   const addName = (e)=>{
     e.preventDefault()
-    setPersons(persons.concat({
-      name:newName
-    }))
+    let checkName = persons.filter((p)=>p===newName)
+    console.log(checkName)
+    if(!checkName.length){
+      alert(`${newName} is already added to phonebook`)
+    }
+    else{
+      setPersons(persons.concat({
+        name:newName
+      }))
+    }
   }
 
   return (
