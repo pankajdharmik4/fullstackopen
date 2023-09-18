@@ -51,12 +51,14 @@ const App = () => {
   : persons;
 
   const handleDelete = (id)=>{
+    if(window.confirm(`Delete ${persons.filter(p => p.id === id)[0].name}?`)){
       personService.
         deletePerson(id)
         .then(()=>{
           setPersons(persons.filter(p => p.id !== id))
         })
       }
+    }
 
   return (
     <div>
