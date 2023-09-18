@@ -3,6 +3,7 @@ import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import personService from './services/persons'
+import Notifications from './components/Notifications'
 
 
 
@@ -11,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber,setNewNumber] = useState('');
   const [newSearch,setNewSearch] = useState('');
+  const [Message,setMessage] = useState(null);
 
   const getPhonebook = ()=>{
     console.log("GET DATA")
@@ -42,12 +44,15 @@ const App = () => {
       }
     }
     else{
-  
       personService.
       create(newPerson)
       .then(response=>{
         setPersons(persons.concat(response))
       })
+      setMessage(`Added ${newName}`)
+      setTimeout(()=>{
+        setMessage(null)
+      },5000)
     }
     setNewName("")
     setNewNumber("")
@@ -70,6 +75,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notifications message={Message} />
+
       <Filter search={newSearch} setNewSearch={setNewSearch}/>
         
       <h2>add a new</h2>
