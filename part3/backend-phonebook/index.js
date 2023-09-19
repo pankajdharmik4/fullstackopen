@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 const bodyParser = require("body-parser")
+var morgan = require('morgan')
 
 let data = [
     { 
@@ -26,6 +27,12 @@ let data = [
 ]
 
 app.use(bodyParser())
+
+morgan.token('body', (request) =>
+  request.method === 'POST' ? JSON.stringify(request.body) : null
+);
+
+app.use(morgan(':method :url :status :res[content-length] :response-time ms :body'))
 
 app.get('/api/persons',(req,res)=>{
     res.json(data)
