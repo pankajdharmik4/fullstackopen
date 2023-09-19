@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express()
 
-const data = [
+let data = [
     { 
       "id": 1,
       "name": "Arto Hellas", 
@@ -39,6 +39,13 @@ app.get('/api/persons/:id',(req,res)=>{
     }
     res.json(person)
 })
+
+
+app.delete('/api/persons/:id',(req,res)=>{
+    data = data.filter((d)=> d.id != req.params.id);
+    res.status(204).end()
+})
+
 const PORT = 3001
 app.listen(PORT,()=>{
     console.log(`Server is running on PORT: ${PORT}`)
