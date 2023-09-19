@@ -32,6 +32,8 @@ morgan.token('body', (request) =>
   request.method === 'POST' ? JSON.stringify(request.body) : null
 );
 
+app.use(express.static('dist'))
+
 app.use(morgan(':method :url :status :res[content-length] :response-time ms :body'))
 
 app.get('/api/persons',(req,res)=>{
