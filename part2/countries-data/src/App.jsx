@@ -2,6 +2,8 @@ import { useEffect,useState } from "react"
 import getCountries from './services/countries'
 import CountryInfo from "./components/CountryInfo"
 
+
+
 function App() {
   const [search, setSearch] = useState('')
   const [countries,setCountries] = useState([])
@@ -22,6 +24,7 @@ function App() {
   const handleShow=(c)=>{
     const dataFiltered = countries.filter((d)=> d.name.common.toLowerCase().search(c.name.common.toLowerCase())!=-1)
     setCountries(dataFiltered)
+    setSearch('')
   }
 
   return (
@@ -35,9 +38,9 @@ function App() {
               ):(
                 <div>
                   {countries.map(c=> {
-                    return <>
-                      <div key={c.name.common}>{c.name.common} <button onClick={()=>handleShow(c)}>show</button></div>
-                    </>
+                    return <div key={c.name.common}>
+                      {c.name.common} <button key={c.name.common} onClick={()=>handleShow(c)}>show</button>
+                      </div>
                   })}
                 </div>
               )}

@@ -1,6 +1,19 @@
 import React from 'react'
+import { useState,useEffect } from 'react'
+import Weather from './Weather'
+import axios from 'axios'
 
+const apiKey = import.meta.env.VITE_API
 const CountryInfo = ({country}) => {
+
+    const [weather, setWeather] = useState(null)
+
+    useEffect(() => {
+        const apiCall = `https://api.openweathermap.org/data/2.5/weather?lat=${country[0].capitalInfo.latlng[0]}&lon=${country[0].capitalInfo.latlng[1]}&appid=${apiKey}&units=metric`
+        axios.get(apiCall)
+          .then(response => setWeather(response.data))
+      }, [country[0].capital[0]])
+
     console.log(country)
   return (
     <div>
@@ -18,6 +31,8 @@ const CountryInfo = ({country}) => {
         }
         </ul>
         <img src={country[0].flags.png} alt={country[0].flags.alt} style={{width:240,height:160}}/>
+        <Weather w={weather} />
+
     </div>
   )
 }
