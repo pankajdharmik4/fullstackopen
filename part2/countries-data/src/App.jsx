@@ -19,6 +19,11 @@ function App() {
     }
   },[search])
 
+  const handleShow=(c)=>{
+    const dataFiltered = countries.filter((d)=> d.name.common.toLowerCase().search(c.name.common.toLowerCase())!=-1)
+    setCountries(dataFiltered)
+  }
+
   return (
     <>
       <div>find countries<input value={search} onChange={(e)=>setSearch(e.target.value)}/></div>
@@ -30,7 +35,9 @@ function App() {
               ):(
                 <div>
                   {countries.map(c=> {
-                    return <div key={c.area}>{c.name.common}</div>
+                    return <>
+                      <div key={c.name.common}>{c.name.common} <button onClick={()=>handleShow(c)}>show</button></div>
+                    </>
                   })}
                 </div>
               )}
