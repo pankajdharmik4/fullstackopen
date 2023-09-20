@@ -39,7 +39,8 @@ app.get('/api/persons/:id',(req,res)=>{
 
 
 app.delete('/api/persons/:id',(req,res)=>{
-    Person.findByIdAndDelete(req.params.id).then((response)=>{
+    Person.findByIdAndRemove(req.params.id)
+    .then((response)=>{
         res.status(204).end()
     })
 })
