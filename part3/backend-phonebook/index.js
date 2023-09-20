@@ -35,7 +35,7 @@ app.get('/api/persons/:id',(req,res)=>{
             res.status(404).end()
         }
     })
-    
+    .catch((error)=>next(error))
 })
 
 app.put('./api/persons/:id',(req,res)=>{
