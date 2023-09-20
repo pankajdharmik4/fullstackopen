@@ -2,29 +2,8 @@ const express = require("express")
 const app = express()
 const bodyParser = require("body-parser")
 var morgan = require('morgan')
+const Person = require('./models/person')
 
-let data = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
 
 app.use(bodyParser())
 
@@ -37,25 +16,32 @@ app.use(express.static('dist'))
 app.use(morgan(':method :url :status :res[content-length] :response-time ms :body'))
 
 app.get('/api/persons',(req,res)=>{
-    res.json(data)
+    Person.find({}).then((response)=>res.json(response));
+    
 })
 
 app.get('/info',(req,res)=>{
-    res.send(`<p>Phonebook has info for ${data.length} people <br/> ${new Date}</p>`)
+    Person.count({}).then((count)=>{
+        res.send(`<p>Phonebook has info for ${count} people <br/> ${new Date}</p>`)
+    })
+    
 })
 
 app.get('/api/persons/:id',(req,res)=>{
-    const person = data.find((d)=>d.id == req.params.id)
-    if(!person){
-        res.status(404).end()
-    }
-    res.json(person)
+    Person.findById(req.params.id).then((response)=>{
+        if(response){
+            res.json(response)
+        }else{
+            res.status(404).end()
+        }
+    })
 })
 
 
 app.delete('/api/persons/:id',(req,res)=>{
-    data = data.filter((d)=> d.id != req.params.id);
-    res.status(204).end()
+    Person.findByIdAndDelete(req.params.id).then((response)=>{
+        res.status(204).end()
+    })
 })
 
 app.post('/api/persons',(req,res)=>{
@@ -63,24 +49,17 @@ app.post('/api/persons',(req,res)=>{
         return res.status(400).json({error: 'content missing'})
     }
 
-    if(data.some((d)=>d.name == req.body.name)){
-        return res.status(400).json({ error: 'name must be unique' })
-    }
-
-    const id=Math.floor(Math.random()*10000);
-    const newPerson = {
-        name: req.body.name,
-        number: req.body.number,
-        id:id
-
-    }
-    // newPerson  = {
-    //     ...newPerson,
-    //     id:
+    // if(data.some((d)=>d.name == req.body.name)){
+    //     return res.status(400).json({ error: 'name must be unique' })
     // }
 
-    data = data.concat(newPerson)
-    res.send(newPerson)
+    const newPerson = new Person({
+        name:  req.body.name,
+        number: req.body.number,
+        })
+    newPerson.save().then((result)=>{
+        res.send(result)
+    })
 })
 
 const PORT = process.env.PORT | 3001
