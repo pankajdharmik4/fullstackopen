@@ -35,14 +35,28 @@ app.get('/api/persons/:id',(req,res)=>{
             res.status(404).end()
         }
     })
+    
 })
 
+app.put('./api/persons/:id',(req,res)=>{
+    const body = request.body
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+    Person.findByIdAndUpdate(req.params.id,person,{new:true})
+    .then((updatedPerson)=>{
+        res.json(updatedPerson)
+    })
+    .catch((error)=>next(error))
+})
 
 app.delete('/api/persons/:id',(req,res)=>{
     Person.findByIdAndRemove(req.params.id)
     .then((response)=>{
         res.status(204).end()
     })
+    .catch((error)=>next(error))
 })
 
 app.post('/api/persons',(req,res)=>{
