@@ -38,13 +38,13 @@ app.get('/api/persons/:id',(req,res)=>{
     .catch((error)=>next(error))
 })
 
-app.put('./api/persons/:id',(req,res)=>{
-    const body = request.body
+app.put('/api/persons/:id',(req,res,next)=>{
+    const body = req.body
     const person = {
         name: body.name,
         number: body.number
     }
-    Person.findByIdAndUpdate(req.params.id,person,{new:true})
+    Person.findByIdAndUpdate(req.params.id,person,{new:true, runValidators: true, context: 'query' })
     .then((updatedPerson)=>{
         res.json(updatedPerson)
     })

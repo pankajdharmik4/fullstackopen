@@ -42,6 +42,10 @@ const App = () => {
           setPersons(persons.map(p => p.name !== newName? p:response))
           console.log(persons)
         })
+        .catch(error=>{
+          setMessage(error.response.data.error);
+          console.log(error.response)
+        })
       }
     }
     else{

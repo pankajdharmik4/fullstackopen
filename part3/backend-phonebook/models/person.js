@@ -26,6 +26,15 @@ mongoose.connect(url)
     },
     number: {
         type:String,
+        minlength: 8,
+        maxlength: 12,
+        validate: {
+          validator: function (v) {
+            return (/(0([1-9]{1,2})-([0-9]{7}))|(0([0-9]{2})-([0-9]{8}))/).test(v);
+          },
+        message: props => `${props.value} is not a valid phone number!`,
+      },
+      required: [true, 'User phone number required']
     }
   })
 
