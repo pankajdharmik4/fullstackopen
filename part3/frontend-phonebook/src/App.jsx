@@ -44,7 +44,7 @@ const App = () => {
         })
         .catch(error=>{
           setMessage(error.response.data.error);
-          console.log(error.response)
+          console.log(error.respons.data.error);
         })
       }
     }
